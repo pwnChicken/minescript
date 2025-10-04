@@ -1,15 +1,11 @@
 import os
-import minescript as m
+import system.lib.minescript as m
 import core.movement_pcww as move
 import core.security as sec
 import asyncio
 import libraries.keyboard as keyboard
 import winsound
 import random
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-sound_file = os.path.join(BASE_DIR, "test3.wav")
-sound_file = sound_file.replace("\\", "/") 
 
 running = True
 stop_event = asyncio.Event()
@@ -23,19 +19,14 @@ def on_key_event(event):
 
 keyboard.hook(on_key_event)
 
-async def play_sound():
-    winsound.PlaySound(sound_file, winsound.SND_FILENAME | winsound.SND_ASYNC)
-
 
 async def farming():
     global running, task, tasks
     while running:
         tasks = await move.phase_move_left_until_air(task, tasks)
-        #winsound.PlaySound(sound_file, winsound.SND_FILENAME | winsound.SND_ASYNC)
         await asyncio.sleep(random.uniform(.5, 1.35))
         await move.phase_move_right_until_air()
         await asyncio.sleep(random.uniform(.3, 1.15))
-        #winsound.PlaySound(sound_file, winsound.SND_FILENAME | winsound.SND_ASYNC)
 
     
 async def main():

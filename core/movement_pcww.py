@@ -1,6 +1,7 @@
 
 import minescript as m
 import core.security as sec
+import core.teleport as teleport
 import asyncio
 import random
 
@@ -14,6 +15,9 @@ async def phase_move_right_until_air():
             if y > new_y:
                 m.echo(f"Y level changed from {y} to {new_y}")
                 break
+            
+
+
             time = random.uniform(0.3, .7)
             # m.echo("Time: ", time)
             await asyncio.sleep(time)
@@ -39,27 +43,7 @@ async def phase_move_left_until_air(task=None, tasks=None):
                 # m.echo("Tasks is not None")
                 # m.echo(f"new_x:x, new_y:y, new_z:z; {new_x}:{x}, {new_y}:{y}, {new_z}:{z}")
                 if new_x == x and new_y == y and new_z == z:
-                    m.echo(f"Teleporting to the beginning of the farm!!!")
-                    m.player_press_attack(False)
-                    m.player_press_left(False)
-
-                    if tasks and not tasks.done() and tasks is not asyncio.current_task():
-                        m.echo(f"Canceling tasks {tasks}")
-                        tasks.cancel()
-
-                    await asyncio.sleep(random.uniform(1, 2))
-                    
-                    if task.cancelled(): 
-                        m.echo("Task cancelled")
-                        return
-
-                    m.echo("Teleporting")
-                    await asyncio.sleep(random.uniform(.4, .9))
-                    m.execute('/warp garden') ### Replace with /warp garden
-                    await asyncio.sleep(random.uniform(.6, .8))
-                    tasks = asyncio.create_task(sec.edge_cases(task))
-                    m.player_press_left(True)
-                    m.player_press_attack(True)
+                    tasks = await teleport.warp(task, tasks)
                 else: 
                     x = new_x 
                     y = new_y 

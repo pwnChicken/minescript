@@ -2,14 +2,14 @@
 ### Check that the item on the players hand isn't swapped
 ### Check if the players coordinates are moving, if not stop breaking blocks
 ### Check if there are any entintys flying around, scan for chat messages potentially too
-
+#### ---->>>> Check if the players yaw/pitch changed <<<<----
 
 #### ENTITIES line 700
 
 from dataclasses import dataclass
-from minescript import entities, player
+from system.lib.minescript import entities, player
 from core.sound import play_sound
-import minescript as m
+from system.lib import minescript as m
 import asyncio
 
 
