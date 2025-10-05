@@ -53,6 +53,7 @@ async def player_item(task):
                 break
 
             if not player_item.main_hand  or player_item.main_hand.get("item") != start_player_item.main_hand.get("item"):
+
                 play_sound()
                 m.echo("Player item swapped")
                 await asyncio.sleep(0.3)
@@ -70,14 +71,16 @@ async def sudden_movement(task):
         m.echo("<+> Sudden Movement check started")
         while not task.done():
             x,y,z = player().position
+            # m.echo(z)
             await asyncio.sleep(0.1)
             new_x,new_y,new_z = player().position
-            if x - 15 < new_x < x + 15 and y - 5 < new_y < y + 5 and z - 15 < new_z < z + 15:
-                ### m.echo("No sudden movement detected")
+            if x - 15 < new_x < x + 15 and y - 7 < new_y < y + 7 and z - 15 < new_z < z + 15:
+                # m.echo("No sudden movement detected")
                 continue
             else:
-                play_sound()
+                # m.echo(f"new_x:x, new_y:y, new_z:z; {new_x}:{x}, {new_y}:{y}, {new_z}:{z}")
                 m.echo("suddent movemnet detected. Stopping script")
+                play_sound()
                 task.cancel()
                 break
 

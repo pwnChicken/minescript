@@ -6,6 +6,7 @@ Going to actually try and have good commets for once lmao
 
 import core.movement_pm as move
 import core.security as sec
+import core.block_check as bc
 import system.lib.minescript as m
 import core.globals as globals
 import asyncio 
@@ -23,6 +24,7 @@ def on_key_event(event):
     if event.name == "right ctrl" and event.event_type == "down":     # Change right ctrl to your button of choice
         m.echo("<!!>Right Ctrl pressed -> stopping...")
         globals.stop_pressed = True
+
         stop_event.set()
 
 keyboard.hook(on_key_event)
@@ -30,16 +32,16 @@ keyboard.hook(on_key_event)
 
 # main farming function
 async def farming():
-    global running, task, tasks
+    global running, task, tasks, block_detection
     while running: 
         tasks = await move.phase_move_left_until_air(task, tasks) # move left 
-        await asyncio.sleep(random.uniform(.1, .3)) # random wait time to make it look less bot like
+        await asyncio.sleep(random.uniform(.153, .5)) # random wait time to make it look less bot like
 
         # await move.phase_move_forward_until_block() # move forward till the block
         #await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like
 
         tasks = await move.phase_move_right_until_air(task, tasks) # move right 
-        await asyncio.sleep(random.uniform(.1, .3)) # random wait time to make it look less bot like
+        await asyncio.sleep(random.uniform(.2, .5)) # random wait time to make it look less bot like
 
         # await move.phase_move_forward_until_block() # move forward
         #await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like
@@ -47,7 +49,7 @@ async def farming():
 
 ## main function this is what makes everything run
 async def main():
-    global running, task, tasks
+    global running, task, tasks, block_detection
 
     task = asyncio.create_task(farming())
     tasks = asyncio.create_task(sec.edge_cases(task))
@@ -57,11 +59,13 @@ async def main():
         if stop_event.is_set():
             m.echo("<-> Stopping Script")
             running = False
-            print("All of this ran")
+            # print("All of this ran")
             task.cancel()
             tasks.cancel()
+
         await asyncio.sleep(0.05)
     m.player_press_attack(False)
+    task.cancel()
     tasks.cancel()
 
 
@@ -72,6 +76,7 @@ async def main():
 
 
 ### RUn the actual script 
+
 m.echo("<+> Starting Farm")
 asyncio.run(main())
 

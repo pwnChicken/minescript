@@ -1,6 +1,6 @@
 import os
 import winsound
-import minescript as m
+import system.lib.minescript as m
 
 
 

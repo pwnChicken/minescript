@@ -1,6 +1,8 @@
 import system.lib.minescript as m
 import asyncio
 import math
+import core.globals as globals
+import time
 
 
 player_orientation = {
@@ -20,7 +22,7 @@ def playerDirection():
             return i
     return None
 
-def getBlockCoordinates(x,y,z):
+def getBlockCoordinatesFront(x,y,z):
     yaw = playerDirection()
     if yaw == "S":
         # print(x,y,z+1)
@@ -37,17 +39,74 @@ def getBlockCoordinates(x,y,z):
     if yaw == -1:
         return None
 
+def getBlockCoordinatesLeft(x, y, z):
+    yaw = playerDirection()
+    if yaw == "S":
+        return m.getblock(x+1, y, z)
+    if yaw == "E":
+        return m.getblock(x, y, z+1)
+    if yaw == "N":
+        return m.getblock(x-1, y, z)
+    if yaw == "W":
+        return m.getblock(x, y, z-1)
+    return None
+
+def getBlockCoordinatesRight(x, y, z):
+    yaw = playerDirection()
+    if yaw == "S":
+        return m.getblock(x-1, y, z)
+    if yaw == "E":
+        return m.getblock(x, y, z-1)
+    if yaw == "N":
+        return m.getblock(x+1, y, z)
+    if yaw == "W":
+        return m.getblock(x, y, z+1)
+    return None
+
 
 def get_block_in_front():
-    raw_x, raw_y, raw_z = [p for p in m.player().position]
-    # print(raw_x, raw_y, raw_z)
-    x = math.floor(raw_x)
-    y = math.floor(raw_y)
-    z = math.floor(raw_z)
-    # print(x,y,z)
-    result = getBlockCoordinates(x,y,z)
-    # print(result)
-    return result
+    m.echo("Starting block check")
+    front_block = None
+    if not globals.stop_pressed:
+        raw_x, raw_y, raw_z = [p for p in m.player().position]
+        # print(raw_x, raw_y, raw_z)
+        x = math.floor(raw_x)
+        y = math.floor(raw_y)
+        z = math.floor(raw_z)
+        # print(x,y,z)
+        front_block = getBlockCoordinatesFront(x,y,z)
+        # print(result)
+    return front_block
+    
+
+def get_block_to_left():
+    m.echo("Checking Left block")
+    left_block = None
+    if not globals.stop_pressed: 
+        raw_x, raw_y, raw_z = [p for p in m.player().position]
+        # print(raw_x, raw_y, raw_z)
+        x = math.floor(raw_x)
+        y = math.floor(raw_y)
+        z = math.floor(raw_z)
+        left_block = getBlockCoordinatesLeft(x,y,z)
+
+    return left_block
+
+def get_block_to_right():
+    m.echo("Checking Right block")
+    right_block = None
+    if not globals.stop_pressed: 
+        raw_x, raw_y, raw_z = [p for p in m.player().position]
+        # print(raw_x, raw_y, raw_z)
+        x = math.floor(raw_x)
+        y = math.floor(raw_y)
+        z = math.floor(raw_z)
+        right_block = getBlockCoordinatesRight(x,y,z)
+
+
+    return right_block
+
+    
 
 async def monitor():
     while True: 
@@ -55,4 +114,4 @@ async def monitor():
         if block and block == "minecraft:air":
             print(f"Detected block: {block}")
             break
-        await asyncio.sleep(0.05)
+        await asyncio.sleep(0.01)
