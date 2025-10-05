@@ -1,4 +1,4 @@
-import minescript as m
+import system.lib.minescript as m
 import asyncio
 import math
 
@@ -38,7 +38,7 @@ def getBlockCoordinates(x,y,z):
         return None
 
 
-async def get_block_in_front():
+def get_block_in_front():
     raw_x, raw_y, raw_z = [p for p in m.player().position]
     # print(raw_x, raw_y, raw_z)
     x = math.floor(raw_x)
@@ -55,4 +55,4 @@ async def monitor():
         if block and block == "minecraft:air":
             print(f"Detected block: {block}")
             break
-        await asyncio.sleep(0.5)
+        await asyncio.sleep(0.05)

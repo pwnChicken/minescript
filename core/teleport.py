@@ -21,7 +21,7 @@ async def warp(task, tasks):
 
     m.echo("Teleporting")
     await asyncio.sleep(random.uniform(.4, .9))
-    m.execute('/tp 129 -61 -115') ### Replace with /warp garden
+    m.execute('/warp garden') ### Replace with /warp garden
     await asyncio.sleep(random.uniform(.6, .8))
     tasks = asyncio.create_task(sec.edge_cases(task))
     m.player_press_left(True)

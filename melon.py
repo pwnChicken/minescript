@@ -6,7 +6,8 @@ Going to actually try and have good commets for once lmao
 
 import core.movement_pm as move
 import core.security as sec
-import minescript as m
+import system.lib.minescript as m
+import core.globals as globals
 import asyncio 
 import libraries.keyboard as keyboard
 import random
@@ -21,6 +22,7 @@ def on_key_event(event):
     # Detect RIGHT CTRL press only
     if event.name == "right ctrl" and event.event_type == "down":     # Change right ctrl to your button of choice
         m.echo("<!!>Right Ctrl pressed -> stopping...")
+        globals.stop_pressed = True
         stop_event.set()
 
 keyboard.hook(on_key_event)
@@ -31,16 +33,16 @@ async def farming():
     global running, task, tasks
     while running: 
         tasks = await move.phase_move_left_until_air(task, tasks) # move left 
-        await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like
+        await asyncio.sleep(random.uniform(.1, .3)) # random wait time to make it look less bot like
 
-        await move.phase_move_forward_until_block() # move forward till the block
-        await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like
+        # await move.phase_move_forward_until_block() # move forward till the block
+        #await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like
 
         tasks = await move.phase_move_right_until_air(task, tasks) # move right 
-        await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like
+        await asyncio.sleep(random.uniform(.1, .3)) # random wait time to make it look less bot like
 
-        await move.phase_move_forward_until_block() # move forward
-        await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like
+        # await move.phase_move_forward_until_block() # move forward
+        #await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like
 
 
 ## main function this is what makes everything run
@@ -55,6 +57,7 @@ async def main():
         if stop_event.is_set():
             m.echo("<-> Stopping Script")
             running = False
+            print("All of this ran")
             task.cancel()
             tasks.cancel()
         await asyncio.sleep(0.05)
