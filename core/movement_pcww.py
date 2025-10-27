@@ -1,5 +1,5 @@
 
-import minescript as m
+import system.lib.minescript as m
 import core.security as sec
 import core.teleport as teleport
 import asyncio
@@ -43,7 +43,11 @@ async def phase_move_left_until_air(task=None, tasks=None):
                 # m.echo("Tasks is not None")
                 # m.echo(f"new_x:x, new_y:y, new_z:z; {new_x}:{x}, {new_y}:{y}, {new_z}:{z}")
                 if new_x == x and new_y == y and new_z == z:
+                    m.player_press_attack(False)
+                    m.player_press_left(False)                    
                     tasks = await teleport.warp(task, tasks)
+                    m.player_press_left(True)
+                    m.player_press_attack(True)
                 else: 
                     x = new_x 
                     y = new_y 

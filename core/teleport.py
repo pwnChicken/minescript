@@ -6,8 +6,7 @@ import core.security as sec
 ### Warps the player to the desired coordinates/warps
 async def warp(task, tasks):
     m.echo(f"Teleporting to the beginning of the farm!!!")
-    m.player_press_attack(False)
-    m.player_press_left(False)
+
 
     if tasks and not tasks.done() and tasks is not asyncio.current_task():
         # m.echo(f"Canceling tasks {tasks}")
@@ -24,6 +23,4 @@ async def warp(task, tasks):
     m.execute('/warp garden') ### Replace with /warp garden
     await asyncio.sleep(random.uniform(.6, .8))
     tasks = asyncio.create_task(sec.edge_cases(task))
-    m.player_press_left(True)
-    m.player_press_attack(True)
     return tasks
