@@ -29,9 +29,9 @@ keyboard.hook(on_key_event)
 async def farming():
     global running, task, tasks
     while running: 
-        print(tasks)
+        #print(tasks)
         tasks = await move.phase_move_forward_until_air(task, tasks)
-        print(tasks)
+        #print(tasks)
         await asyncio.sleep(random.uniform(.192, .64))
 
         tasks = await move.phase_move_forward_left_until_air(task, tasks)

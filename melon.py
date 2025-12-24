@@ -33,15 +33,16 @@ keyboard.hook(on_key_event)
 # main farming function
 async def farming():
     global running, task, tasks, block_detection
-    while running: 
-        tasks = await move.phase_move_left_until_air(task, tasks) # move left 
-        await asyncio.sleep(random.uniform(.153, .5)) # random wait time to make it look less bot like
+    while running and not globals.stop_pressed: 
+        if not globals.stop_pressed:
+            tasks = await move.phase_move_left_until_air(task, tasks) # move left 
+            await asyncio.sleep(random.uniform(.153, .5)) # random wait time to make it look less bot like
 
         # await move.phase_move_forward_until_block() # move forward till the block
         #await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like
-
-        tasks = await move.phase_move_right_until_air(task, tasks) # move right 
-        await asyncio.sleep(random.uniform(.2, .5)) # random wait time to make it look less bot like
+        if not globals.stop_pressed:
+            tasks = await move.phase_move_right_until_air(task, tasks) # move right 
+            await asyncio.sleep(random.uniform(.2, .5)) # random wait time to make it look less bot like
 
         # await move.phase_move_forward_until_block() # move forward
         #await asyncio.sleep(random.uniform(.05, .1)) # random wait time to make it look less bot like

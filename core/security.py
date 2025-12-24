@@ -9,7 +9,9 @@
 from dataclasses import dataclass
 from system.lib.minescript import entities, player
 from core.sound import play_sound
+from core.stop import stopping
 from system.lib import minescript as m
+from core import globals
 import asyncio
 
 
@@ -30,7 +32,6 @@ async def entity_check(task):
             for ent in near_entities:
                 #print(m.player_name())
                 if ent.name != m.player_name():
-                    play_sound()
                     m.echo(f"Entities {ent.name} at {ent.position}")
                     ## just checks if entity is ther. won't do anything, maybe play a slight sound queue
 
@@ -40,6 +41,7 @@ async def entity_check(task):
         return
     
 async def player_item(task):
+    sound_played = False
     #### make sure the players item isn't swapped. if swapped stop script within 2 seconds.
     try: 
         m.echo("<+> Player Item check started")
@@ -53,8 +55,11 @@ async def player_item(task):
                 break
 
             if not player_item.main_hand  or player_item.main_hand.get("item") != start_player_item.main_hand.get("item"):
-
-                play_sound()
+                if not sound_played:
+                    stopping()
+                    globals.stop_pressed = True
+                    play_sound()
+                    sound_played = True
                 m.echo("Player item swapped")
                 await asyncio.sleep(0.3)
                 task.cancel()
@@ -66,6 +71,8 @@ async def player_item(task):
         return
 
 async def sudden_movement(task):
+    sound_played = False
+
     ### check for suddent movement such as teleport 
     try:
         m.echo("<+> Sudden Movement check started")
@@ -80,9 +87,13 @@ async def sudden_movement(task):
             else:
                 # m.echo(f"new_x:x, new_y:y, new_z:z; {new_x}:{x}, {new_y}:{y}, {new_z}:{z}")
                 m.echo("suddent movemnet detected. Stopping script")
-                play_sound()
+                if not sound_played:
+                    stopping()
+                    globals.stop_pressed = True
+                    play_sound()
+                    sound_played = True
                 task.cancel()
-                break
+                
 
 
     except asyncio.CancelledError:

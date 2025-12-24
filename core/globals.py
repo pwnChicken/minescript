@@ -5,3 +5,4 @@
 teleported = False
 running = False
 stop_pressed = False
+fishy_toggle = False
